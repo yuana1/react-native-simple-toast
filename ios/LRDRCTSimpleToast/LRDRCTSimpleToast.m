@@ -70,10 +70,14 @@ RCT_EXPORT_METHOD(show:(NSString *)msg duration:(double)duration {
 });
 
 RCT_EXPORT_METHOD(showWithGravity:(NSString *)msg duration:(double)duration gravity:(nonnull NSNumber *)gravity{
-    [self _show:msg duration:duration gravity:gravity.intValue];
+    [self _show:msg duration:duration gravity:gravity.intValue xOffset:-1 yOffset:-1];
 });
 
-- (void)_show:(NSString *)msg duration:(NSTimeInterval)duration gravity:(NSInteger)gravity {
+RCT_EXPORT_METHOD(showWithGravityOffset:(NSString *)msg duration:(double)duration gravity:(nonnull NSNumber *)gravity xOffset:(nonnull NSNumber *)xOffset yOffset:(nonnull NSNumber *)yOffset{
+    [self _show:msg duration:duration gravity:gravity.intValue xOffset:xOffset.intValue yOffset:yOffset.intValue];
+});
+
+- (void)_show:(NSString *)msg duration:(NSTimeInterval)duration gravity:(NSInteger)gravity xOffset:(NSInteger)xOffset yOffset:(NSInteger)yOffset {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIView *root = [[[[[UIApplication sharedApplication] delegate] window] rootViewController] view];
         CGRect bound = root.bounds;
@@ -94,12 +98,20 @@ RCT_EXPORT_METHOD(showWithGravity:(NSString *)msg duration:(double)duration grav
         } else {
             position = CSToastPositionBottom;
         }
+        
+        //设置padding, 充当offset用
+        CSToastStyle *style = [[CSToastStyle alloc] initWithDefaultStyle];
+
+        if(-1 != yOffset) {
+            style.verticalPadding = yOffset;
+        }
+
         [view makeToast:msg
             duration:duration
             position:position
             title:nil
             image:nil
-            style:nil
+            style:style
             completion:^(BOOL didTap) {
                 [blockView removeFromSuperview];
             }];

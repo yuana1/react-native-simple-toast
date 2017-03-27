@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(showWithGravityOffset:(NSString *)msg duration:(double)duratio
         //设置padding, 充当offset用
         CSToastStyle *style = [[CSToastStyle alloc] initWithDefaultStyle];
 
-        if (yOffset < 0) {
+        if (yOffset >= 0) {
             style.verticalPadding = yOffset;
         }
 

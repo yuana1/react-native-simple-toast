@@ -1,6 +1,6 @@
 import {NativeModules,ToastAndroid,Platform} from 'react-native';
 
-var RCTToastAndroid = Platform.OS === 'android' ? ToastAndroid : NativeModules.LRDRCTSimpleToast;
+var RCTToastAndroid = Platform.OS === 'android' ? Toast : NativeModules.LRDRCTSimpleToast;
 
 var SimpleToast = {
   // Toast duration constants
@@ -25,6 +25,15 @@ var SimpleToast = {
     gravity,
   ) {
     RCTToastAndroid.showWithGravity(message, duration === undefined ? this.SHORT : duration, gravity);
+  },
+  showWithGravityOffset: function (
+    message,
+    duration,
+    gravity,
+	  xOffset,
+	  yOffset
+  ) {
+    RCTToastAndroid.showWithGravityOffset(message, duration === undefined ? this.SHORT : duration, gravity, xOffset, yOffset);
   },
 };
 

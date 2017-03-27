@@ -66,11 +66,11 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_METHOD(show:(NSString *)msg duration:(double)duration {
-    [self _show:msg duration:duration gravity:LRDRCTSimpleToastGravityBottom];
+    [self _show:msg duration:duration gravity:LRDRCTSimpleToastGravityBottom xOffset:0 yOffset:0];
 });
 
 RCT_EXPORT_METHOD(showWithGravity:(NSString *)msg duration:(double)duration gravity:(nonnull NSNumber *)gravity{
-    [self _show:msg duration:duration gravity:gravity.intValue xOffset:-1 yOffset:-1];
+    [self _show:msg duration:duration gravity:gravity.intValue xOffset:0 yOffset:0];
 });
 
 RCT_EXPORT_METHOD(showWithGravityOffset:(NSString *)msg duration:(double)duration gravity:(nonnull NSNumber *)gravity xOffset:(nonnull NSNumber *)xOffset yOffset:(nonnull NSNumber *)yOffset{
@@ -99,24 +99,19 @@ RCT_EXPORT_METHOD(showWithGravityOffset:(NSString *)msg duration:(double)duratio
             position = CSToastPositionBottom;
         }
         
-        //设置padding, 充当offset用
-        CSToastStyle *style = [[CSToastStyle alloc] initWithDefaultStyle];
-
-        if (yOffset >= 0) {
-            style.verticalPadding = yOffset;
-        }
-
         [view makeToast:msg
             duration:duration
             position:position
+            xOffset:xOffset
+            yOffset:yOffset
             title:nil
             image:nil
-            style:style
+            style:nil
             completion:^(BOOL didTap) {
                 [blockView removeFromSuperview];
             }];
     });
-}
+};
 
 @end
 

@@ -104,6 +104,34 @@ extern const NSString * CSToastPositionBottom;
        completion:(void(^)(BOOL didTap))completion;
 
 /**
+ Creates and presents a new toast view with a message, title, and image. Duration,
+ position, and style can be set explicitly. The completion block executes when the
+ toast view completes. `didTap` will be `YES` if the toast view was dismissed from
+ a tap.
+ 
+ @param message The message to be displayed
+ @param duration The toast duration
+ @param position The toast's center point. Can be one of the predefined CSToastPosition
+ constants or a `CGPoint` wrapped in an `NSValue` object.
+ @param xOffset  right positive
+ @param yOffset  up positive
+ @param title The title
+ @param image The image
+ @param style The style. The shared style will be used when nil
+ @param completion The completion block, executed after the toast view disappears.
+ didTap will be `YES` if the toast view was dismissed from a tap.
+ */
+- (void)makeToast:(NSString *)message
+         duration:(NSTimeInterval)duration
+         position:(id)position
+          xOffset:(NSInteger)xOffset
+          yOffset:(NSInteger)yOffset
+            title:(NSString *)title
+            image:(UIImage *)image
+            style:(CSToastStyle *)style
+       completion:(void(^)(BOOL didTap))completion;
+
+/**
  Creates a new toast view with any combination of message, title, and image.
  The look and feel is configured via the style. Unlike the `makeToast:` methods,
  this method does not present the toast view automatically. One of the showToast:

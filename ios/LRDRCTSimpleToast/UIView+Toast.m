@@ -84,6 +84,13 @@ static const NSString * CSToastQueueKey             = @"CSToastQueueKey";
     [self showToast:toast duration:duration position:position completion:completion];
 }
 
+- (void)makeToast:(NSString *)message duration:(NSTimeInterval)duration position:(id)position xOffset:(NSInteger)xOffset yOffset:(NSInteger)yOffset title:(NSString *)title image:(UIImage *)image style:(CSToastStyle *)style completion:(void(^)(BOOL didTap))completion {
+    UIView *toast = [self toastViewForMessage:message title:title image:image style:style];
+    CGPoint point = [self cs_centerPointForPosition:position xOffset:xOffset yOffset:yOffset withToast:toast];
+    position = [NSValue valueWithCGPoint:point];
+    [self showToast:toast duration:duration position:position completion:completion];
+}
+
 #pragma mark - Show Toast Methods
 
 - (void)showToast:(UIView *)toast {
@@ -398,6 +405,24 @@ static const NSString * CSToastQueueKey             = @"CSToastQueueKey";
     
     // default to bottom
     return CGPointMake(self.bounds.size.width/2, (self.bounds.size.height - (toast.frame.size.height / 2)) - style.verticalPadding);
+}
+
+// offset 遵循 笛卡尔坐标系
+- (CGPoint)cs_centerPointForPosition:(id)point xOffset:(NSInteger)xOffset yOffset:(NSInteger)yOffset withToast:(UIView *)toast {
+    CSToastStyle *style = [CSToastManager sharedStyle];
+    
+    if([point isKindOfClass:[NSString class]]) {
+        if([point caseInsensitiveCompare:CSToastPositionTop] == NSOrderedSame) {
+            return CGPointMake(self.bounds.size.width/2 + xOffset, (toast.frame.size.height / 2) + style.verticalPadding - yOffset);
+        } else if([point caseInsensitiveCompare:CSToastPositionCenter] == NSOrderedSame) {
+            return CGPointMake(self.bounds.size.width / 2 + xOffset, self.bounds.size.height / 2 -  yOffset);
+        }
+    } else if ([point isKindOfClass:[NSValue class]]) {
+        return [point CGPointValue];
+    }
+    
+    // default to bottom
+    return CGPointMake(self.bounds.size.width/2 + xOffset, (self.bounds.size.height - (toast.frame.size.height / 2)) - style.verticalPadding - yOffset);
 }
 
 @end

@@ -1,6 +1,6 @@
 import {NativeModules,ToastAndroid,Platform} from 'react-native';
 
-var RCTToastAndroid = Platform.OS === 'android' ? Toast : NativeModules.LRDRCTSimpleToast;
+var RCTToastAndroid = Platform.OS === 'android' ? NativeModules.Toast : NativeModules.LRDRCTSimpleToast;
 
 var SimpleToast = {
   // Toast duration constants
